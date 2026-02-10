@@ -16,7 +16,10 @@ Game::~Game() {
 
 void Game::Update() {
 
-    if (currentstate == GameState::LOGO && GetTime() > 2.0f){
+    float dt = GetFrameTime();
+
+
+    if (currentstate == GameState::LOGO && GetTime() > 60.0f){
         currentstate = GameState::MENU;
     }
 
@@ -24,14 +27,38 @@ void Game::Update() {
         currentstate = GameState::GAMEPLAY;
     }
 
+    switch(currentstate) {
+        case GameState::LOGO:
+            loadingprogress += dt * 0.1;
+            if (loadingprogress >= 1.0f || IsKeyPressed(KEY_P)) currentstate = GameState::MENU;
+        break;
+    }
+
 }
 
 void Game::Draw() {
     BeginDrawing();
-      ClearBackground(BLACK);
+      ClearBackground( {10, 10, 25, 255});
 
-      if (currentstate == GameState::MENU) DrawText("SAFARI STUDIO", 400, 300, 40, GOLD);
-      if (currentstate == GameState::MENU) DrawText("PRESS ENTER", 500, 400, 20, RAYWHITE);
+      if (currentstate == GameState::LOGO) {
+
+            DrawText("SAFARI STUDIO", 475, 300, 40, GOLD);
+
+            DrawRectangleLinesEx((Rectangle){440,360, 400, 20}, 2.0f, BLUE);
+            DrawRectangle(445,365, 390*loadingprogress, 10, (Color){0, 255, 255, 255});
+            DrawText("INITIALISING NEON CORE...", 440, 390, 10, RAYWHITE);
+
+      } 
+      if (currentstate == GameState::MENU) {
+
+            for (int i=0; i<screenwidth; i+=40) {
+                DrawLine(i, 0, i, screenheight, (Color){0, 255, 255, 50} );
+            }
+
+            DrawText("PROJECT NEON", 400, 200, 60, MAGENTA);
+            DrawText("PRESS ENTER TO START", 500, 450, 20, RAYWHITE);
+
+      }
       if (currentstate == GameState::GAMEPLAY) DrawText("GAME ACTIVE", 100, 100, 20, LIME);
 
     EndDrawing();

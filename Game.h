@@ -24,4 +24,8 @@ class Game {
         int screenwidth;
         int screenheight;
 
+        Font FuturisticFont;
+        float loadingprogress;
+        void DrawUI();
+
 };
