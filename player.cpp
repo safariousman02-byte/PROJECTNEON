@@ -13,10 +13,12 @@ void Player::UPdate(float dt) {
 
     Vector2 direction = {0, 0};
 
-    if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) position.y -= 1;
-    if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) position.y += 1;
-    if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) position.x -= 1;
-    if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) position.x += 1;
+    int playerspeed = 100.0f;
+
+    if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_UP)) position.y -= playerspeed;
+    if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_DOWN)) position.y += playerspeed;
+    if (IsKeyPressed(KEY_A) || IsKeyDown(KEY_LEFT)) position.x -= playerspeed;
+    if (IsKeyPressed(KEY_D) || IsKeyDown(KEY_RIGHT)) position.x += playerspeed;
 
     if (Vector2Length(direction) > 0) {
 

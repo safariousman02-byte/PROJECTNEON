@@ -1,6 +1,7 @@
 #include "Game.h"
 
-Game::Game() {
+Game::Game(){
+
     screenwidth = 1280;
     screenheight = 720;
     
@@ -30,13 +31,29 @@ void Game::Update() {
     switch(currentstate) {
 
         case GameState::LOGO:
-            loadingprogress += dt * 0.1;
+            loadingprogress += dt * 0.1f;
             if (loadingprogress >= 1.0f || IsKeyPressed(KEY_P)) currentstate = GameState::MENU;
         break;
 
         case GameState::GAMEPLAY:
 
             player.UPdate(dt);
+
+            spawntimer += dt;
+
+            if (spawntimer >= 2.0f) {
+
+                Vector2 randompos = { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight())};
+                enemies.push_back(Enemy(randompos));
+                spawntimer = 0.0f;
+                TraceLog(LOG_INFO, "ENEMY SPAW! TOTAL: %i", enemies.size());
+
+            }
+
+            for (int i=0; i<enemies.size(); i++){
+                enemies[i].Update(player.GetPosition(), dt);
+            }
+            
 
         break;
     }
@@ -57,6 +74,9 @@ void Game::Draw() {
             DrawRectangle(445,365, 390*loadingprogress, 10, (Color){0, 255, 255, 255});
             DrawText("INITIALISING NEON CORE...", 440, 390, 10, RAYWHITE);
 
+            DrawCircleV(GetMousePosition(), 30, Fade((Color){0, 255, 255, 255}, 0.5f));
+            DrawCircleLines(GetMousePosition().x, GetMousePosition().y, 30, (Color){0, 255, 255, 255});
+
         break;
 
         case GameState::MENU:
@@ -68,12 +88,19 @@ void Game::Draw() {
             DrawText("PROJECT NEON", 400, 200, 60, MAGENTA);
             DrawText("PRESS ENTER TO START", 500, 450, 20, RAYWHITE);
 
+            DrawCircleV(GetMousePosition(), 30, Fade((Color){0, 255, 255, 255}, 0.5f));
+            DrawCircleLines(GetMousePosition().x, GetMousePosition().y, 30, (Color){0, 255, 255, 255});
+
         break;
 
         case GameState::GAMEPLAY:
             DrawText("GAME ACTIVE", 100, 100, 20, LIME);
 
             player.Draw();
+
+            for (int i=0; i<enemies.size(); i++) {
+                enemies[i].Draw();
+            }
 
         break;
       }
