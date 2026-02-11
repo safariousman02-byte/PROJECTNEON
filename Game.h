@@ -1,5 +1,6 @@
 #pragma once 
 #include "raylib.h"
+#include "player.h"
 
 enum class GameState {
     LOGO,
@@ -27,5 +28,7 @@ class Game {
         Font FuturisticFont;
         float loadingprogress;
         void DrawUI();
+
+        Player player;
 
 };
