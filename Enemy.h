@@ -8,7 +8,7 @@ class Enemy {
         void Update(Vector2 playerpos, float dt);
         void Draw();
 
-        Vector2 GetMousePosition() {
+        Vector2 GetPosition() {
             return position;
         }
 

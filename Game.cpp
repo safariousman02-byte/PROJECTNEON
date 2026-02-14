@@ -50,8 +50,43 @@ void Game::Update() {
 
             }
 
-            for (int i=0; i<enemies.size(); i++){
-                enemies[i].Update(player.GetPosition(), dt);
+            for (auto& enemy : enemies){
+                enemy.Update(player.GetPosition(), dt);
+            }
+
+            shootime += dt;
+
+            if (shootime >= 0.5f) {
+
+                Vector2 shootdir = { 0, -1};
+                projectiles.push_back(Projectile(player.GetPosition(), shootdir));
+                shootime = 0;
+            }
+
+            for (int i=0 ; i< projectiles.size(); i++) {
+
+               projectiles[i].Update(dt);
+
+                 if (projectiles[i].isoffscreen()) {
+                    projectiles.erase(projectiles.begin() + i);
+                    i--;
+                 }
+            }
+
+            for (int i=0; i < projectiles.size(); i++) {
+                for (int j=0; j < enemies.size(); j++) {
+
+                    if (CheckCollisionCircles(projectiles[i].GetPosition(), 5, enemies[j].GetPosition(), 10)) {
+                        
+                        projectiles.erase(projectiles.begin() + i);
+                        enemies.erase(enemies.begin() + j);
+
+                        i--;
+
+                        break;
+
+                    }
+                }
             }
             
 
@@ -100,6 +135,10 @@ void Game::Draw() {
 
             for (int i=0; i<enemies.size(); i++) {
                 enemies[i].Draw();
+            }
+
+            for (int i=0; i<projectiles.size(); i++) {
+                projectiles[i].Draw();
             }
 
         break;

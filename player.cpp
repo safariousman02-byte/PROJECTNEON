@@ -13,7 +13,7 @@ void Player::UPdate(float dt) {
 
     Vector2 direction = {0, 0};
 
-    int playerspeed = 100.0f;
+    int playerspeed = 10.0f;
 
     if (IsKeyPressed(KEY_W) || IsKeyDown(KEY_UP)) position.y -= playerspeed;
     if (IsKeyPressed(KEY_S) || IsKeyDown(KEY_DOWN)) position.y += playerspeed;

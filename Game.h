@@ -1,8 +1,12 @@
 #pragma once 
 #include "raylib.h"
+
 #include "player.h"
+
 #include <vector>
 #include "Enemy.h"
+
+#include "projectile.h"
 
 enum class GameState {
     LOGO,
@@ -35,6 +39,9 @@ class Game {
 
         std::vector<Enemy> enemies;
         float spawntimer;
+
+        std::vector<Projectile> projectiles;
+        float shootime;
         
 
 };
