@@ -4,7 +4,7 @@
 Projectile::Projectile(Vector2 pos, Vector2 dir) {
     position = pos;
     direction = dir;
-    speed = 600;
+    speed = 1000;
 }
 
 void Projectile::Update(float dt) {

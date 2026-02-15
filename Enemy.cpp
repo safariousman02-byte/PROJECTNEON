@@ -3,7 +3,7 @@
 
 Enemy::Enemy(Vector2 startpos) {
     position = startpos;
-    speed = 100.0f;
+    speed = 50.0f;
 }
 
 void Enemy::Update(Vector2 playerpos, float dt) {

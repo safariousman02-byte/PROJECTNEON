@@ -8,6 +8,8 @@
 
 #include "projectile.h"
 
+#include "Gem.h"
+
 enum class GameState {
     LOGO,
     MENU,
@@ -43,6 +45,8 @@ class Game {
 
         std::vector<Projectile> projectiles;
         float shootime;
+
+        std::vector<Gem> gems;
         
 
 };

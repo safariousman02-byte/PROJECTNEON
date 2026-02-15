@@ -56,7 +56,7 @@ void Game::Update() {
 
             shootime += dt;
 
-            if (shootime >= 0.5f) {
+            if (IsKeyDown(KEY_SPACE) && shootime >= 0.5f) {
 
                 Vector2 shootdir = { 0, -1};
                 projectiles.push_back(Projectile(player.GetPosition(), shootdir));
@@ -77,6 +77,8 @@ void Game::Update() {
                 for (int j=0; j < enemies.size(); j++) {
 
                     if (CheckCollisionCircles(projectiles[i].GetPosition(), 5, enemies[j].GetPosition(), 10)) {
+
+                        gems.push_back(Gem(enemies[j].GetPosition()));
                         
                         projectiles.erase(projectiles.begin() + i);
                         enemies.erase(enemies.begin() + j);
@@ -86,6 +88,18 @@ void Game::Update() {
                         break;
 
                     }
+
+                    for (int i=0; i<gems.size(); i++) {
+
+                        if (CheckCollisionCircles(player.GetPosition(), 20, gems[i].GetPosition(), 10));
+
+                        gems.erase(gems.begin() + i);
+                        i--;
+
+                        TraceLog(LOG_INFO, "XP COLLECTED!");
+                    }
+
+                    
                 }
             }
 
@@ -112,6 +126,7 @@ void Game::Update() {
 
                 enemies.clear();
                 projectiles.clear();
+                gems.clear();
                 player = Player();
                 currentstate = GameState::GAMEPLAY;
             }
@@ -165,6 +180,8 @@ void Game::Draw() {
             for (int i=0; i<projectiles.size(); i++) {
                 projectiles[i].Draw();
             }
+
+            for (auto& gem : gems) gem.Draw();
 
             DrawText(TextFormat("HEALTH: %.0f", player.GetHealth()), 10, 10, 20, RED);
 
