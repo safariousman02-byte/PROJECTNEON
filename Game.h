@@ -12,6 +12,7 @@ enum class GameState {
     LOGO,
     MENU,
     GAMEPLAY,
+    GAMEOVER,
     EXIT
 };
 

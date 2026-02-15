@@ -8,6 +8,14 @@ class Player {
         void UPdate(float dt);
         void Draw();
 
+        float GetHealth(){
+            return health;
+        }
+
+        void TakeDamage(float amount) {
+            health -= amount;
+        }
+
         Vector2 GetPosition() {
             return position;
         }
@@ -16,5 +24,8 @@ class Player {
         Vector2 position;
         float speed;
         Color color;
+        
+        float health;
+        float maxhealth;
 
 };

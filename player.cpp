@@ -7,6 +7,9 @@ Player::Player() {
     position = {640, 360};
     speed = 300.0f;
     color = (Color){0, 255, 255, 255};
+
+    maxhealth = 100.0f;
+    health = maxhealth;
 }
 
 void Player::UPdate(float dt) {

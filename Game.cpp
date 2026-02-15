@@ -88,8 +88,33 @@ void Game::Update() {
                     }
                 }
             }
+
+            for (int i=0; i<enemies.size(); i++) {
+
+                if (CheckCollisionCircles(player.GetPosition(), 15, enemies[i].GetPosition(), 10)) {
+
+                    player.TakeDamage(10.0f * dt);
+                }
+            }
+
+            if (player.GetHealth() <= 0 || IsKeyPressed(KEY_K)) {
+
+                currentstate = GameState::GAMEOVER;
+            }
+
             
 
+        break;
+
+        case GameState::GAMEOVER:
+            
+            if (IsKeyPressed(KEY_ENTER)) {
+
+                enemies.clear();
+                projectiles.clear();
+                player = Player();
+                currentstate = GameState::GAMEPLAY;
+            }
         break;
     }
 
@@ -141,7 +166,17 @@ void Game::Draw() {
                 projectiles[i].Draw();
             }
 
+            DrawText(TextFormat("HEALTH: %.0f", player.GetHealth()), 10, 10, 20, RED);
+
         break;
+
+        case GameState::GAMEOVER:
+            
+            DrawText("MISSSION FAILED", 400, 300, 60, RED);
+            DrawText("PRESS ENTER TO RESTART", 550, 400, 20, RAYWHITE);    
+
+        break;    
+
       }
 
 
