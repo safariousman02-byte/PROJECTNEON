@@ -10,6 +10,8 @@
 
 #include "Gem.h"
 
+#include "raymath.h"
+
 enum class GameState {
     LOGO,
     MENU,
@@ -47,6 +49,11 @@ class Game {
         float shootime;
 
         std::vector<Gem> gems;
+
+        float spawnrate;
+        float gametimer;
+
+        float shakeintensity;
         
 
 };

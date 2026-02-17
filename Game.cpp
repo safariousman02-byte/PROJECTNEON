@@ -9,6 +9,9 @@ Game::Game(){
     SetTargetFPS(60);
 
     currentstate = GameState::LOGO;
+
+    spawnrate = 2.0f;
+    gametimer = 0.0f;
 }
 
 Game::~Game() {
@@ -39,14 +42,32 @@ void Game::Update() {
 
             player.UPdate(dt);
 
+            gametimer += dt;
+
+            if ((int)gametimer % 10 == 0 && spawnrate > 0.3f) {
+                spawnrate -= 0.001f;
+            }
+
             spawntimer += dt;
 
-            if (spawntimer >= 2.0f) {
+            if (spawntimer >= spawnrate) {
 
-                Vector2 randompos = { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight())};
-                enemies.push_back(Enemy(randompos));
-                spawntimer = 0.0f;
-                TraceLog(LOG_INFO, "ENEMY SPAW! TOTAL: %zu", enemies.size());
+                int spawncount = 1 + (player.Getlevel()/3);
+
+                for (int i=0; i<spawncount; i++) {
+
+                    float angle = GetRandomValue(0, 360)*DEG2RAD;
+                
+
+                    Vector2 spawnpos = { 
+                        player.GetPosition().x + cosf(angle)*800, 
+                        player.GetPosition().y + sinf(angle)*800
+                    };
+
+                    enemies.push_back(Enemy(spawnpos));
+                
+                }
+                spawntimer = 0;
 
             }
 
@@ -108,7 +129,12 @@ void Game::Update() {
                 if (CheckCollisionCircles(player.GetPosition(), 15, enemies[i].GetPosition(), 10)) {
 
                     player.TakeDamage(10.0f * dt);
+                    shakeintensity = 5.0f;
                 }
+            }
+
+            if (shakeintensity > 0) {
+                shakeintensity -= 10.0f * dt;
             }
 
             if (player.GetHealth() <= 0 || IsKeyPressed(KEY_K)) {
@@ -140,6 +166,19 @@ void Game::Update() {
 void Game::Draw() {
     BeginDrawing();
       ClearBackground( {10, 10, 25, 255});
+
+      Camera2D camera = { 0 };
+
+        if (shakeintensity > 0) {
+            camera.offset = {
+                (float)GetRandomValue(-shakeintensity, shakeintensity),
+                (float)GetRandomValue(-shakeintensity, shakeintensity)
+            };
+        }
+
+        BeginMode2D(camera);
+
+        EndMode2D();
 
       switch(currentstate) {
 
