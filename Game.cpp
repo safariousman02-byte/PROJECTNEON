@@ -96,7 +96,7 @@ void Game::Update() {
                         gems.erase(gems.begin() + i);
                         i--;
 
-                        TraceLog(LOG_INFO, "XP COLLECTED!");
+                        player.Addxp(10.0f);
                     }
 
                     
@@ -122,7 +122,7 @@ void Game::Update() {
 
         case GameState::GAMEOVER:
             
-            if (IsKeyPressed(KEY_ENTER)) {
+            if (IsKeyPressed(KEY_R)) {
 
                 enemies.clear();
                 projectiles.clear();
@@ -130,6 +130,7 @@ void Game::Update() {
                 player = Player();
                 currentstate = GameState::GAMEPLAY;
             }
+
         break;
     }
 
@@ -141,7 +142,8 @@ void Game::Draw() {
 
       switch(currentstate) {
 
-        case GameState::LOGO:
+        case GameState::LOGO:{
+
 
             DrawText("SAFARI STUDIO", 475, 300, 40, GOLD);
 
@@ -151,10 +153,11 @@ void Game::Draw() {
 
             DrawCircleV(GetMousePosition(), 30, Fade((Color){0, 255, 255, 255}, 0.5f));
             DrawCircleLines(GetMousePosition().x, GetMousePosition().y, 30, (Color){0, 255, 255, 255});
-
+      }
         break;
 
-        case GameState::MENU:
+        case GameState::MENU:{
+
 
             for (int i=0; i<screenwidth; i+=40) {
                     DrawLine(i, 0, i, screenheight, (Color){0, 255, 255, 50} );
@@ -165,10 +168,13 @@ void Game::Draw() {
 
             DrawCircleV(GetMousePosition(), 30, Fade((Color){0, 255, 255, 255}, 0.5f));
             DrawCircleLines(GetMousePosition().x, GetMousePosition().y, 30, (Color){0, 255, 255, 255});
+        
+        }
 
         break;
 
-        case GameState::GAMEPLAY:
+        case GameState::GAMEPLAY:{
+
             DrawText("GAME ACTIVE", 100, 100, 20, LIME);
 
             player.Draw();
@@ -183,18 +189,41 @@ void Game::Draw() {
 
             for (auto& gem : gems) gem.Draw();
 
-            DrawText(TextFormat("HEALTH: %.0f", player.GetHealth()), 10, 10, 20, RED);
+            
+            DrawRectangle(0, 0, GetScreenWidth(), 20, DARKGRAY);
+
+            float barwidth = GetScreenWidth()*player.Getxppercent();
+
+            DrawRectangle(0, 0, (int)barwidth, 20, LIME);
+
+            DrawText(TextFormat("LEVEL: %i", player.Getlevel()), 10, 25, 20, RAYWHITE);
+
+            DrawRectangle(10, 50, 200, 10, RED);
+
+            DrawRectangle(10, 50, (int)(200*(player.GetHealth()/ 100.0f)), 10, GREEN);
+
+        }
 
         break;
 
-        case GameState::GAMEOVER:
+        case GameState::GAMEOVER: {
+
+            DrawText("GAME OVER", 500, 200, 60, RED);
+            DrawText("PRESS ENTER TO RESTART", 550, 350, 20, RAYWHITE);
+        
+        }
+
+        break;
+
+        case GameState::EXIT:{
+
+            DrawText("EXITING GAME", 500, 200, 60, RED);
+
+        }
             
-            DrawText("MISSSION FAILED", 400, 300, 60, RED);
-            DrawText("PRESS ENTER TO RESTART", 550, 400, 20, RAYWHITE);    
+        break;
 
-        break;    
-
-      }
+    }
 
 
     EndDrawing();

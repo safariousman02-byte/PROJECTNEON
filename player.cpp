@@ -10,6 +10,10 @@ Player::Player() {
 
     maxhealth = 100.0f;
     health = maxhealth;
+
+    level = 1;
+    currentxp = 0.0f;
+    xptonextlevel = 50.0f;
 }
 
 void Player::UPdate(float dt) {
