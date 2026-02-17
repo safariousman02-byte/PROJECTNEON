@@ -35,7 +35,7 @@ void Game::Update() {
             if (loadingprogress >= 1.0f || IsKeyPressed(KEY_P)) currentstate = GameState::MENU;
         break;
 
-        case GameState::GAMEPLAY:
+        case GameState::GAMEPLAY:{
 
             player.UPdate(dt);
 
@@ -46,7 +46,7 @@ void Game::Update() {
                 Vector2 randompos = { (float)GetRandomValue(0, GetScreenWidth()), (float)GetRandomValue(0, GetScreenHeight())};
                 enemies.push_back(Enemy(randompos));
                 spawntimer = 0.0f;
-                TraceLog(LOG_INFO, "ENEMY SPAW! TOTAL: %i", enemies.size());
+                TraceLog(LOG_INFO, "ENEMY SPAW! TOTAL: %zu", enemies.size());
 
             }
 
@@ -63,7 +63,7 @@ void Game::Update() {
                 shootime = 0;
             }
 
-            for (int i=0 ; i< projectiles.size(); i++) {
+            for (int i=0 ; i < projectiles.size(); i++) {
 
                projectiles[i].Update(dt);
 
@@ -88,19 +88,19 @@ void Game::Update() {
                         break;
 
                     }
-
-                    for (int i=0; i<gems.size(); i++) {
-
-                        if (CheckCollisionCircles(player.GetPosition(), 20, gems[i].GetPosition(), 10));
-
-                        gems.erase(gems.begin() + i);
-                        i--;
-
-                        player.Addxp(10.0f);
-                    }
-
                     
                 }
+            }
+
+            for (int i=0; i<gems.size(); i++) {
+
+                if (CheckCollisionCircles(player.GetPosition(), 30, gems[i].GetPosition(), 30)){
+
+                    gems.erase(gems.begin() + i);
+                    player.Addxp(10.0f);
+                    i--;
+                }
+            
             }
 
             for (int i=0; i<enemies.size(); i++) {
@@ -117,21 +117,22 @@ void Game::Update() {
             }
 
             
-
+        }
         break;
 
         case GameState::GAMEOVER:
-            
+                
             if (IsKeyPressed(KEY_R)) {
 
-                enemies.clear();
-                projectiles.clear();
-                gems.clear();
-                player = Player();
-                currentstate = GameState::GAMEPLAY;
+                    enemies.clear();
+                    projectiles.clear();
+                    gems.clear();
+                    player = Player();
+                    currentstate = GameState::GAMEPLAY;
             }
-
+        
         break;
+
     }
 
 }
@@ -153,7 +154,7 @@ void Game::Draw() {
 
             DrawCircleV(GetMousePosition(), 30, Fade((Color){0, 255, 255, 255}, 0.5f));
             DrawCircleLines(GetMousePosition().x, GetMousePosition().y, 30, (Color){0, 255, 255, 255});
-      }
+        }
         break;
 
         case GameState::MENU:{
